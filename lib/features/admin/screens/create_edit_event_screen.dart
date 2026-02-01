@@ -125,8 +125,9 @@ class _CreateEditEventScreenState extends State<CreateEditEventScreen> {
       'location': _locationController.text,
       'imageUrl': _imageUrlController.text,
       'capacity': int.tryParse(_capacityController.text) ?? 100,
-      'startDate': eventDate.toIso8601String(),
-      'endDate': eventDate.add(const Duration(hours: 2)).toIso8601String(), // Default 2 hours
+      'date': _startDate.toIso8601String(),
+      'startTime': '${_startTime.hour.toString().padLeft(2, '0')}:${_startTime.minute.toString().padLeft(2, '0')}',
+      'endTime': '${(_startTime.hour + 2).toString().padLeft(2, '0')}:${_startTime.minute.toString().padLeft(2, '0')}', // Default 2 hours
     };
 
     final provider = context.read<AdminProvider>();

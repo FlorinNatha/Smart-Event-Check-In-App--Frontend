@@ -34,11 +34,12 @@ class ApiConstants {
   static const String scanTicket = '/scan/validate';
   
   // Admin
-  static const String createEvent = '/admin/events';
-  static String updateEvent(String id) => '/admin/events/$id';
-  static String deleteEvent(String id) => '/admin/events/$id';
-  static const String analytics = '/admin/analytics';
-  static const String allRegistrations = '/admin/registrations';
+  // Admin - utilizing the main events endpoints as they are protected now
+  static const String createEvent = '/events';
+  static String updateEvent(String id) => '/events/$id';
+  static String deleteEvent(String id) => '/events/$id';
+  static const String analytics = '/events/admin/stats';
+  static const String allRegistrations = '/events/admin/registrations';
   
   // Timeout
   static const Duration connectionTimeout = Duration(seconds: 30);
