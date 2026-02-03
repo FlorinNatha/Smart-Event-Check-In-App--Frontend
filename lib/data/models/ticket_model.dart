@@ -33,13 +33,13 @@ class TicketModel {
   /// Create TicketModel from JSON
   factory TicketModel.fromJson(Map<String, dynamic> json) {
     return TicketModel(
-      id: json['id'] ?? json['_id'] ?? '',
-      eventId: json['eventId'] ?? '',
-      userId: json['userId'] ?? '',
-      eventName: json['eventName'] ?? '',
-      eventLocation: json['eventLocation'] ?? '',
-      eventDate: json['eventDate'] != null
-          ? DateTime.parse(json['eventDate'])
+      id: json['_id'] ?? json['id'] ?? '',
+      eventId: json['event'] is Map ? (json['event']['_id'] ?? '') : (json['event'] ?? ''),
+      userId: json['user'] is Map ? (json['user']['_id'] ?? '') : (json['user'] ?? ''),
+      eventName: json['event'] is Map ? (json['event']['name'] ?? 'Unknown Event') : 'Unknown Event',
+      eventLocation: json['event'] is Map ? (json['event']['location'] ?? '') : '',
+      eventDate: json['event'] is Map && json['event']['date'] != null
+          ? DateTime.parse(json['event']['date'])
           : DateTime.now(),
       qrCode: json['qrCode'] ?? '',
       status: json['status'] ?? 'active',

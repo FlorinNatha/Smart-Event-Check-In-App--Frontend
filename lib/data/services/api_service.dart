@@ -201,7 +201,7 @@ class ApiException implements Exception {
 
   @override
   String toString() {
-    return 'ApiException(statusCode: $statusCode, message: $message)';
+    return message;
   }
 
   /// Check if unauthorized

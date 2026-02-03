@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import '../models/event_model.dart';
 import '../models/user_model.dart';
 import '../services/api_service.dart';

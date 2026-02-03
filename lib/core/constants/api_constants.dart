@@ -1,9 +1,16 @@
+import 'dart:io';
+import 'package:flutter/foundation.dart';
+
 /// API configuration constants
 class ApiConstants {
   ApiConstants._();
 
-  // Base URL - Update this with your actual backend URL
-  static const String baseUrl = 'http://localhost:3000/api';
+  // Base URL - Smart selection for Android Emulator vs Device/Web
+  static String get baseUrl {
+    if (kIsWeb) return 'http://localhost:3000/api';
+    if (Platform.isAndroid) return 'http://192.168.123.34:3000/api';
+    return 'http://localhost:3000/api'; // Default/iOS
+  }
   
   // API Endpoints
   // Auth
@@ -21,8 +28,8 @@ class ApiConstants {
   static String exportAttendance(String id) => '/events/$id/export';
   
   // Tickets
-  static const String myTickets = '/tickets/my-tickets';
-  static String ticketById(String id) => '/tickets/$id';
+  static const String myTickets = '/registrations/my-tickets';
+  static String ticketById(String id) => '/registrations/$id';
   static const String validateTicket = '/tickets/validate';
   
   // User
