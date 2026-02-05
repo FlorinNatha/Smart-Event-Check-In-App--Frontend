@@ -8,7 +8,7 @@ class ApiConstants {
   // Base URL - Smart selection for Android Emulator vs Device/Web
   static String get baseUrl {
     if (kIsWeb) return 'http://localhost:3000/api';
-    if (Platform.isAndroid) return 'http://192.168.123.34:3000/api';
+    if (Platform.isAndroid) return 'http://192.168.8.189:3000/api';
     return 'http://localhost:3000/api'; // Default/iOS
   }
   

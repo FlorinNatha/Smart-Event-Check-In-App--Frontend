@@ -89,8 +89,12 @@ class _QrScannerScreenState extends State<QrScannerScreen> {
       // 3. Call Validate.
       
       final ticketDetails = await _ticketRepository.getTicketById(tId);
-      final eventIdFromTicket = ticketDetails.eventId; // Assuming TicketModel has eventId getter or accessible field
-
+      final eventIdFromTicket = ticketDetails.eventId; 
+      
+      debugPrint('🔍 Scanned Ticket ID: $tId');
+      debugPrint('🔍 Extracted Event ID: \'$eventIdFromTicket\'');
+      debugPrint('🔍 Ticket Full Data: $ticketDetails');
+      
       final result = await _ticketRepository.validateTicket(tId, eventIdFromTicket);
       
       if (mounted) {
