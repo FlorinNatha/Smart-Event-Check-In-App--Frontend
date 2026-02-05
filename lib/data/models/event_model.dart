@@ -43,12 +43,8 @@ class EventModel {
       name: json['name'] ?? '',
       description: json['description'] ?? '',
       location: json['location'] ?? '',
-      startDate: json['startDate'] != null
-          ? DateTime.parse(json['startDate'])
-          : DateTime.now(),
-      endDate: json['endDate'] != null
-          ? DateTime.parse(json['endDate'])
-          : DateTime.now(),
+      startDate: _parseDateTime(json['startDate'], json['date'], json['startTime']),
+      endDate: _parseDateTime(json['endDate'], json['date'], json['endTime']),
       capacity: json['capacity'] ?? 0,
       registeredCount: json['registeredCount'] ?? 0,
       checkedInCount: json['checkedInCount'] ?? 0,
@@ -64,6 +60,35 @@ class EventModel {
           ? DateTime.parse(json['updatedAt'])
           : null,
     );
+  }
+
+  /// Helper to parse date/time from various backend formats
+  static DateTime _parseDateTime(dynamic isoDate, dynamic dateObj, dynamic timeStr) {
+    try {
+      // 1. Try ISO date (legacy/full format)
+      if (isoDate != null) {
+        return DateTime.parse(isoDate);
+      }
+
+      // 2. Try Date + Time components
+      if (dateObj != null) {
+        final date = DateTime.parse(dateObj); // "2023-10-27T00:00:00.000Z"
+        if (timeStr != null && timeStr is String && timeStr.contains(':')) {
+           final parts = timeStr.split(':');
+           return DateTime(
+             date.year, 
+             date.month, 
+             date.day, 
+             int.parse(parts[0]), 
+             int.parse(parts[1])
+           );
+        }
+        return date; // Fallback to just date
+      }
+    } catch (e) {
+      // debugPrint('Error parsing date: $e');
+    }
+    return DateTime.now(); // Final fallback
   }
 
   /// Convert EventModel to JSON

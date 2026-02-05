@@ -34,7 +34,9 @@ class TicketModel {
   factory TicketModel.fromJson(Map<String, dynamic> json) {
     return TicketModel(
       id: json['_id'] ?? json['id'] ?? '',
-      eventId: json['event'] is Map ? (json['event']['_id'] ?? '') : (json['event'] ?? ''),
+      eventId: json['event'] is Map 
+          ? (json['event']['_id'] ?? json['event']['id'] ?? '') 
+          : (json['event'] ?? ''),
       userId: json['user'] is Map ? (json['user']['_id'] ?? '') : (json['user'] ?? ''),
       eventName: json['event'] is Map ? (json['event']['name'] ?? 'Unknown Event') : 'Unknown Event',
       eventLocation: json['event'] is Map ? (json['event']['location'] ?? '') : '',
