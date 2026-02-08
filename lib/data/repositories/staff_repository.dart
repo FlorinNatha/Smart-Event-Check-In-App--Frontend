@@ -29,4 +29,18 @@ class StaffRepository {
       rethrow;
     }
   }
+
+  /// Get staff stats
+  Future<Map<String, dynamic>> getStats() async {
+    try {
+      final response = await _apiService.get('/staff/stats');
+      if (response != null && response is Map<String, dynamic>) {
+        return response;
+      }
+      return {'todayScans': 0};
+    } catch (e) {
+      // debugPrint('Error fetching stats: $e');
+      return {'todayScans': 0};
+    }
+  }
 }
