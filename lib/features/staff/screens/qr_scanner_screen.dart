@@ -112,19 +112,13 @@ class _QrScannerScreenState extends State<QrScannerScreen> {
           message: e.toString().replaceAll('Exception:', ''),
         );
       }
-    } finally {
-      if (mounted) {
-        setState(() {
-          _isProcessing = false;
-        });
-      }
     }
   }
 
   void _showResultDialog({required bool success, required String title, required String message}) {
     showDialog(
       context: context,
-      barrierDismissible: false,
+      barrierDismissible: true,
       builder: (context) => AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         backgroundColor: success ? Colors.green[50] : Colors.red[50],
@@ -154,7 +148,10 @@ class _QrScannerScreenState extends State<QrScannerScreen> {
           TextButton(
             onPressed: () {
               Navigator.pop(context);
-              // Resume camera logic if needed, usually MobileScanner handles it but we might need to reset state
+              // Reset scanner state so next QR can be scanned
+              setState(() {
+                _isProcessing = false;
+              });
             },
             child: Text(
               'OK',
@@ -166,7 +163,14 @@ class _QrScannerScreenState extends State<QrScannerScreen> {
           ),
         ],
       ),
-    );
+    ).then((_) {
+      // Also reset if dismissed by tapping outside the dialog
+      if (mounted) {
+        setState(() {
+          _isProcessing = false;
+        });
+      }
+    });
   }
 
   @override
