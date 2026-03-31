@@ -8,8 +8,8 @@ class StaffRepository {
   Future<Map<String, dynamic>> validateTicket(String qrCode) async {
     try {
       final response = await _apiService.post(
-        '/staff/validate',
-        body: {'qrCode': qrCode},
+        '/registrations/validate',
+        body: {'ticketId': qrCode},
       );
       return response;
     } catch (e) {
@@ -20,7 +20,7 @@ class StaffRepository {
   /// Get scan history
   Future<List<Map<String, dynamic>>> getScanHistory() async {
     try {
-      final response = await _apiService.get('/staff/history');
+      final response = await _apiService.get('/registrations/staff/history');
       if (response != null && response is List) {
         return List<Map<String, dynamic>>.from(response);
       }
@@ -33,7 +33,7 @@ class StaffRepository {
   /// Get staff stats
   Future<Map<String, dynamic>> getStats() async {
     try {
-      final response = await _apiService.get('/staff/stats');
+      final response = await _apiService.get('/registrations/staff/stats');
       if (response != null && response is Map<String, dynamic>) {
         return response;
       }
