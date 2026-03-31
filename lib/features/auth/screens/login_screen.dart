@@ -32,7 +32,7 @@ class _LoginScreenState extends State<LoginScreen> {
     if (!_formKey.currentState!.validate()) return;
 
     final authProvider = context.read<AuthProvider>();
-    
+
     final success = await authProvider.login(
       email: _emailController.text.trim(),
       password: _passwordController.text,
@@ -41,14 +41,17 @@ class _LoginScreenState extends State<LoginScreen> {
     if (!mounted) return;
 
     if (success) {
-      // Navigate based on user role
+      // Navigate based on user role (including legacy `user` role)
       final role = authProvider.user?.role;
-      if (role == 'attendee') {
+      if (role == 'attendee' || role == 'user') {
         context.go('/attendee/home');
       } else if (role == 'staff') {
         context.go('/staff/home');
       } else if (role == 'admin') {
         context.go('/admin/home');
+      } else {
+        // Fallback to attendee if role is unknown
+        context.go('/attendee/home');
       }
     } else {
       // Show error
@@ -73,7 +76,7 @@ class _LoginScreenState extends State<LoginScreen> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 const SizedBox(height: 40),
-                
+
                 // Logo/Icon
                 Container(
                   height: 100,
@@ -95,18 +98,18 @@ class _LoginScreenState extends State<LoginScreen> {
                     color: Colors.white,
                   ),
                 ),
-                
+
                 const SizedBox(height: 32),
-                
+
                 // Title
                 Text(
                   'Welcome Back!',
                   style: AppTextStyles.displayMedium,
                   textAlign: TextAlign.center,
                 ),
-                
+
                 const SizedBox(height: 8),
-                
+
                 Text(
                   'Sign in to continue',
                   style: AppTextStyles.bodyLarge.copyWith(
@@ -114,9 +117,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   textAlign: TextAlign.center,
                 ),
-                
+
                 const SizedBox(height: 48),
-                
+
                 // Email Field
                 CustomTextField(
                   controller: _emailController,
@@ -127,9 +130,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   textInputAction: TextInputAction.next,
                   validator: Validators.email,
                 ),
-                
+
                 const SizedBox(height: 20),
-                
+
                 // Password Field
                 CustomTextField(
                   controller: _passwordController,
@@ -141,9 +144,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   validator: Validators.password,
                   onSubmitted: (_) => _handleLogin(),
                 ),
-                
+
                 const SizedBox(height: 12),
-                
+
                 // Forgot Password
                 Align(
                   alignment: Alignment.centerRight,
@@ -159,9 +162,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                 ),
-                
+
                 const SizedBox(height: 24),
-                
+
                 // Login Button
                 Consumer<AuthProvider>(
                   builder: (context, authProvider, _) {
@@ -173,9 +176,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     );
                   },
                 ),
-                
+
                 const SizedBox(height: 24),
-                
+
                 // Divider
                 Row(
                   children: [
@@ -192,9 +195,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     const Expanded(child: Divider()),
                   ],
                 ),
-                
+
                 const SizedBox(height: 24),
-                
+
                 // Register Link
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -222,7 +225,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ],
                 ),
-                
+
                 const SizedBox(height: 40),
               ],
             ),
@@ -232,4 +235,3 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 }
-

@@ -22,18 +22,16 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   void initState() {
     super.initState();
-    
+
     _controller = AnimationController(
       duration: const Duration(milliseconds: 1500),
       vsync: this,
     );
 
-    _scaleAnimation = Tween<double>(begin: 0.5, end: 1.0).animate(
-      CurvedAnimation(
-        parent: _controller,
-        curve: Curves.easeOutBack,
-      ),
-    );
+    _scaleAnimation = Tween<double>(
+      begin: 0.5,
+      end: 1.0,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOutBack));
 
     _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(
@@ -48,7 +46,7 @@ class _SplashScreenState extends State<SplashScreen>
 
   Future<void> _checkAuth() async {
     await Future.delayed(const Duration(seconds: 2));
-    
+
     if (!mounted) return;
 
     final authProvider = context.read<AuthProvider>();
@@ -58,7 +56,7 @@ class _SplashScreenState extends State<SplashScreen>
 
     if (authProvider.isAuthenticated) {
       final role = authProvider.user?.role;
-      if (role == 'attendee') {
+      if (role == 'attendee' || role == 'user') {
         context.go('/attendee/home');
       } else if (role == 'staff') {
         context.go('/staff/home');
@@ -82,9 +80,7 @@ class _SplashScreenState extends State<SplashScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: const BoxDecoration(
-          gradient: AppColors.primaryGradient,
-        ),
+        decoration: const BoxDecoration(gradient: AppColors.primaryGradient),
         child: Center(
           child: FadeTransition(
             opacity: _fadeAnimation,
@@ -114,9 +110,9 @@ class _SplashScreenState extends State<SplashScreen>
                       color: AppColors.primary,
                     ),
                   ),
-                  
+
                   const SizedBox(height: 32),
-                  
+
                   // App Name
                   Text(
                     'Smart Event',
@@ -125,9 +121,9 @@ class _SplashScreenState extends State<SplashScreen>
                       fontSize: 36,
                     ),
                   ),
-                  
+
                   const SizedBox(height: 8),
-                  
+
                   Text(
                     'Check-in App',
                     style: AppTextStyles.headlineMedium.copyWith(
@@ -135,9 +131,9 @@ class _SplashScreenState extends State<SplashScreen>
                       fontWeight: FontWeight.w400,
                     ),
                   ),
-                  
+
                   const SizedBox(height: 48),
-                  
+
                   // Loading Indicator
                   const SizedBox(
                     height: 40,
@@ -156,4 +152,3 @@ class _SplashScreenState extends State<SplashScreen>
     );
   }
 }
-

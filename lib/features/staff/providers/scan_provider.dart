@@ -66,8 +66,9 @@ class ScanProvider with ChangeNotifier {
       _scanHistory = await _repository.getScanHistory();
       notifyListeners();
     } catch (e) {
+    }
   }
-  
+
   /// Fetch today's stats
   Future<void> fetchStats() async {
     try {

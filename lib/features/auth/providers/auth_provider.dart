@@ -18,6 +18,12 @@ class AuthProvider with ChangeNotifier {
   String? get error => _error;
   bool get isAuthenticated => _user != null;
 
+  String _normalizeRole(String? role) {
+    if (role == null || role.isEmpty) return 'attendee';
+    if (role.toLowerCase() == 'user') return 'attendee';
+    return role.toLowerCase();
+  }
+
   /// Initialize auth state
   Future<void> init() async {
     try {
@@ -26,7 +32,7 @@ class AuthProvider with ChangeNotifier {
         final userId = _storage.getUserId();
         final email = _storage.getUserEmail();
         final name = _storage.getUserName();
-        final role = _storage.getUserRole();
+        final role = _normalizeRole(_storage.getUserRole());
 
         if (userId != null && email != null && name != null && role != null) {
           _user = UserModel(
@@ -45,10 +51,7 @@ class AuthProvider with ChangeNotifier {
   }
 
   /// Login
-  Future<bool> login({
-    required String email,
-    required String password,
-  }) async {
+  Future<bool> login({required String email, required String password}) async {
     try {
       debugPrint('🔑 AuthProvider: Attempting login for $email');
       _setLoading(true);
@@ -56,10 +59,7 @@ class AuthProvider with ChangeNotifier {
 
       final response = await _apiService.post(
         ApiConstants.login,
-        body: {
-          'email': email,
-          'password': password,
-        },
+        body: {'email': email, 'password': password},
         includeAuth: false,
       );
       debugPrint('✅ AuthProvider: Login Response: $response');
@@ -74,6 +74,9 @@ class AuthProvider with ChangeNotifier {
         if (refreshToken != null) {
           await _storage.saveRefreshToken(refreshToken);
         }
+
+        // Normalize role aliases like `user` -> `attendee`
+        userData['role'] = _normalizeRole(userData['role']);
 
         // Save user data
         _user = UserModel.fromJson(userData);
@@ -135,6 +138,9 @@ class AuthProvider with ChangeNotifier {
         if (refreshToken != null) {
           await _storage.saveRefreshToken(refreshToken);
         }
+
+        // Normalize role aliases like `user` -> `attendee`
+        userData['role'] = _normalizeRole(userData['role']);
 
         // Save user data
         _user = UserModel.fromJson(userData);
