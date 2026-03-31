@@ -15,6 +15,9 @@ class ScanProvider with ChangeNotifier {
   String? get message => _message;
   Map<String, dynamic>? get lastResult => _lastResult;
   List<Map<String, dynamic>> get scanHistory => _scanHistory;
+  
+  int _todayScans = 0;
+  int get todayScans => _todayScans;
 
   /// Process scanned code
   Future<void> processCode(String code) async {
@@ -37,6 +40,8 @@ class ScanProvider with ChangeNotifier {
         'status': 'valid',
         'details': result,
       });
+      
+      _todayScans++; // Increment local count
       
     } catch (e) {
       _status = ScanStatus.error;
@@ -61,7 +66,17 @@ class ScanProvider with ChangeNotifier {
       _scanHistory = await _repository.getScanHistory();
       notifyListeners();
     } catch (e) {
-      debugPrint('Error fetching history: $e');
+    }
+  }
+
+  /// Fetch today's stats
+  Future<void> fetchStats() async {
+    try {
+      final stats = await _repository.getStats();
+      _todayScans = stats['todayScans'] ?? 0;
+      notifyListeners();
+    } catch (e) {
+      debugPrint('Error fetching stats: $e');
     }
   }
 }

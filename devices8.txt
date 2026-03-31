@@ -1,0 +1,11 @@
+﻿Found 3 connected devices:
+  Windows (desktop) ΓÇó windows ΓÇó windows-x64    ΓÇó Microsoft Windows [Version 10.0.26200.8037]
+  Chrome (web)      ΓÇó chrome  ΓÇó web-javascript ΓÇó Google Chrome 145.0.7632.160
+  Edge (web)        ΓÇó edge    ΓÇó web-javascript ΓÇó Microsoft Edge 146.0.3856.72
+
+Device 1491455574009601 is not authorized.
+You might need to check your device for an authorization dialog.
+
+Run "flutter emulators" to list and start any available device emulators.
+
+If you expected another device to be detected, please run "flutter doctor" to diagnose potential issues. You may also try increasing the time to wait for connected devices with the "--device-timeout" flag. Visit https://flutter.dev/setup/ for troubleshooting tips.

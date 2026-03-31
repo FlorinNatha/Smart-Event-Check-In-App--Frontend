@@ -47,6 +47,7 @@ dependencies:
   http: ^1.2.0
   shared_preferences: ^2.5.4
   flutter_secure_storage: ^9.0.0
+  device_info_plus: ^10.1.0
   
   # UI Components
   google_fonts: ^6.1.0

@@ -6,9 +6,24 @@ import '../../../core/theme/app_text_styles.dart';
 import '../../../core/widgets/custom_button.dart';
 import '../../auth/providers/auth_provider.dart';
 
+import '../providers/scan_provider.dart';
+
 /// Staff home screen
-class StaffHomeScreen extends StatelessWidget {
+class StaffHomeScreen extends StatefulWidget {
   const StaffHomeScreen({super.key});
+
+  @override
+  State<StaffHomeScreen> createState() => _StaffHomeScreenState();
+}
+
+class _StaffHomeScreenState extends State<StaffHomeScreen> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<ScanProvider>().fetchStats();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -103,11 +118,15 @@ class StaffHomeScreen extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 8),
-                  Text(
-                    '0',
-                    style: AppTextStyles.displayLarge.copyWith(
-                      color: AppColors.primary,
-                    ),
+                  Consumer<ScanProvider>(
+                    builder: (context, scanProvider, child) {
+                      return Text(
+                        '${scanProvider.todayScans}',
+                        style: AppTextStyles.displayLarge.copyWith(
+                          color: AppColors.primary,
+                        ),
+                      );
+                    },
                   ),
                 ],
               ),
