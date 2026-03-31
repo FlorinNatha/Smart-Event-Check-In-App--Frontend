@@ -11,18 +11,25 @@ class AdminProvider with ChangeNotifier {
   Map<String, dynamic>? _dashboardStats;
   Map<String, dynamic>? _eventStats;
   List<Map<String, dynamic>> _registrations = [];
+  List<Map<String, dynamic>> _allRegistrations = [];
 
   bool get isLoading => _isLoading;
   String? get error => _error;
   Map<String, dynamic>? get dashboardStats => _dashboardStats;
   Map<String, dynamic>? get eventStats => _eventStats;
   List<Map<String, dynamic>> get registrations => _registrations;
+  List<Map<String, dynamic>> get allRegistrations => _allRegistrations;
 
   /// Load Dashboard Stats
   Future<void> loadDashboardStats() async {
     _setLoading(true);
     try {
-      _dashboardStats = await _repository.getDashboardStats();
+      final results = await Future.wait([
+        _repository.getDashboardStats(),
+        _repository.getAllRegistrations(),
+      ]);
+      _dashboardStats = results[0] as Map<String, dynamic>;
+      _allRegistrations = results[1] as List<Map<String, dynamic>>;
     } catch (e) {
       _error = e.toString();
     } finally {

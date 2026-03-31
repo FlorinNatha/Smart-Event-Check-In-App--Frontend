@@ -84,7 +84,7 @@ class _CreateEditEventScreenState extends State<CreateEditEventScreen> {
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: _startDate,
-      firstDate: DateTime.now(),
+      firstDate: DateTime(2000),
       lastDate: DateTime(2101),
     );
     if (picked != null && picked != _startDate) {

@@ -70,4 +70,17 @@ class AdminRepository {
       rethrow;
     }
   }
+
+  /// Get ALL registrations across all events
+  Future<List<Map<String, dynamic>>> getAllRegistrations() async {
+    try {
+      final response = await _apiService.get('/events/admin/all-registrations');
+      if (response != null && response is List) {
+        return List<Map<String, dynamic>>.from(response);
+      }
+      return [];
+    } catch (e) {
+      rethrow;
+    }
+  }
 }
