@@ -223,11 +223,28 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
     }
     
     final allRegs = adminProvider.allRegistrations;
-    Map<String, List<Map<String, dynamic>>> grouped = {};
+
+    // Group by event _id (not name) so same-named events stay separate
+    // Store a Map from eventId -> { 'label': 'Name • Location • Date', 'regs': [...] }
+    final Map<String, Map<String, dynamic>> groupedById = {};
     for (var reg in allRegs) {
        final eventData = reg['event'] as Map<String, dynamic>?;
-       final eventName = eventData?['name'] ?? 'Unknown Event';
-       grouped.putIfAbsent(eventName, () => []).add(reg);
+       final eventId = eventData?['_id'] ?? eventData?['id'] ?? 'unknown';
+       if (!groupedById.containsKey(eventId)) {
+          final name = eventData?['name'] ?? 'Unknown Event';
+          final location = eventData?['location'] ?? '';
+          final rawDate = eventData?['date'];
+          String dateStr = '';
+          if (rawDate != null) {
+             try {
+                final dt = DateTime.parse(rawDate.toString());
+                dateStr = '${dt.day}/${dt.month}/${dt.year}';
+             } catch (_) {}
+          }
+          final label = [name, if (location.isNotEmpty) location, if (dateStr.isNotEmpty) dateStr].join(' • ');
+          groupedById[eventId] = {'label': label, 'regs': <Map<String, dynamic>>[]};
+       }
+       (groupedById[eventId]!['regs'] as List<Map<String, dynamic>>).add(reg);
     }
 
     if (type == 'registrations') {
@@ -238,13 +255,16 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
              Expanded(
                 child: ListView.builder(
                    controller: controller,
-                   itemCount: grouped.keys.length,
+                   itemCount: groupedById.keys.length,
                    itemBuilder: (ctx, i) {
-                      final eventName = grouped.keys.elementAt(i);
-                      final regs = grouped[eventName]!;
+                      final eventId = groupedById.keys.elementAt(i);
+                      final group = groupedById[eventId]!;
+                      final label = group['label'] as String;
+                      final regs = group['regs'] as List<Map<String, dynamic>>;
                       return ExpansionTile(
                          leading: const Icon(Icons.people, color: AppColors.secondary),
-                         title: Text('$eventName (${regs.length})', style: AppTextStyles.titleMedium),
+                         title: Text('${regs.length} registered', style: AppTextStyles.titleMedium),
+                         subtitle: Text(label, style: AppTextStyles.bodySmall.copyWith(color: AppColors.textSecondary)),
                          children: regs.map((r) {
                             final userData = r['user'] as Map<String, dynamic>?;
                             return ListTile(
@@ -269,14 +289,17 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
              Expanded(
                 child: ListView.builder(
                    controller: controller,
-                   itemCount: grouped.keys.length,
+                   itemCount: groupedById.keys.length,
                    itemBuilder: (ctx, i) {
-                      final eventName = grouped.keys.elementAt(i);
-                      final regs = grouped[eventName]!.where((r) => r['status'] == 'checked-in').toList();
+                      final eventId = groupedById.keys.elementAt(i);
+                      final group = groupedById[eventId]!;
+                      final label = group['label'] as String;
+                      final regs = (group['regs'] as List<Map<String, dynamic>>).where((r) => r['status'] == 'checked-in').toList();
                       if (regs.isEmpty) return const SizedBox.shrink();
                       return ExpansionTile(
                          leading: const Icon(Icons.check_circle, color: AppColors.success),
-                         title: Text('$eventName (${regs.length})', style: AppTextStyles.titleMedium),
+                         title: Text('${regs.length} checked in', style: AppTextStyles.titleMedium),
+                         subtitle: Text(label, style: AppTextStyles.bodySmall.copyWith(color: AppColors.textSecondary)),
                          children: regs.map((r) {
                             final userData = r['user'] as Map<String, dynamic>?;
                             return ListTile(
@@ -301,14 +324,16 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
              Expanded(
                 child: ListView.builder(
                    controller: controller,
-                   itemCount: grouped.keys.length,
+                   itemCount: groupedById.keys.length,
                    itemBuilder: (ctx, i) {
-                      final eventName = grouped.keys.elementAt(i);
-                      final regs = grouped[eventName]!;
+                      final eventId = groupedById.keys.elementAt(i);
+                      final group = groupedById[eventId]!;
+                      final label = group['label'] as String;
+                      final regs = group['regs'] as List<Map<String, dynamic>>;
                       final checkedIn = regs.where((r) => r['status'] == 'checked-in').length;
                       final rate = regs.isEmpty ? 0.0 : (checkedIn / regs.length);
                       return ListTile(
-                         title: Text(eventName, style: AppTextStyles.titleMedium),
+                         title: Text(label, style: AppTextStyles.titleMedium),
                          contentPadding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                          subtitle: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,

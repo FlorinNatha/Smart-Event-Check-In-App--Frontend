@@ -7,6 +7,7 @@ import 'features/attendee/providers/event_provider.dart';
 import 'features/attendee/providers/ticket_provider.dart';
 import 'features/staff/providers/scan_provider.dart';
 import 'features/admin/providers/admin_provider.dart';
+import 'features/notifications/providers/notification_provider.dart';
 import 'core/widgets/offline_banner.dart';
 
 /// Main app widget
@@ -22,6 +23,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => TicketProvider()),
         ChangeNotifierProvider(create: (_) => ScanProvider()),
         ChangeNotifierProvider(create: (_) => AdminProvider()),
+        ChangeNotifierProvider(create: (_) => NotificationProvider()),
       ],
       child: MaterialApp.router(
         title: 'Smart Event Check-in',

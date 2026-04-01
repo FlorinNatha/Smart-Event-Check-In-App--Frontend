@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
@@ -32,13 +32,17 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
 
     if (mounted) {
       if (success) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Registration successful!'),
-            backgroundColor: Colors.green,
-          ),
-        );
-        context.pushReplacement('/attendee/tickets');
+        // Re-fetch event to get updated registeredCount / availableSpots
+        await provider.fetchEventDetails(widget.eventId);
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Registration successful!'),
+              backgroundColor: Colors.green,
+            ),
+          );
+          context.pushReplacement('/attendee/tickets');
+        }
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(

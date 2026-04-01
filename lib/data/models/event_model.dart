@@ -72,7 +72,7 @@ class EventModel {
 
       // 2. Try Date + Time components
       if (dateObj != null) {
-        final date = DateTime.parse(dateObj); // "2023-10-27T00:00:00.000Z"
+        final date = DateTime.parse(dateObj).toLocal(); // Ensure we extract components from local time
         if (timeStr != null && timeStr is String && timeStr.contains(':')) {
            final parts = timeStr.split(':');
            return DateTime(
@@ -83,7 +83,7 @@ class EventModel {
              int.parse(parts[1])
            );
         }
-        return date; // Fallback to just date
+        return date; // Already converted to local
       }
     } catch (e) {
       // debugPrint('Error parsing date: $e');
