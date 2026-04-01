@@ -1,10 +1,11 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
 import '../../auth/providers/auth_provider.dart';
 import '../providers/event_provider.dart';
+import '../../notifications/providers/notification_provider.dart';
 import '../widgets/event_card.dart';
 
 /// Attendee home screen
@@ -22,6 +23,8 @@ class _AttendeeHomeScreenState extends State<AttendeeHomeScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       // Fetch some events for the home screen
       context.read<EventProvider>().fetchEvents();
+      // Fetch notifications to get unread count
+      context.read<NotificationProvider>().fetchNotifications();
     });
   }
 
@@ -70,9 +73,43 @@ class _AttendeeHomeScreenState extends State<AttendeeHomeScreen> {
               ),
             ),
             actions: [
-              IconButton(
-                icon: const Icon(Icons.notifications_outlined),
-                onPressed: () {},
+              Consumer<NotificationProvider>(
+                builder: (context, provider, _) {
+                  return Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      IconButton(
+                        icon: const Icon(Icons.notifications_outlined),
+                        onPressed: () => context.push('/notifications'),
+                      ),
+                      if (provider.unreadCount > 0)
+                        Positioned(
+                          right: 8,
+                          top: 8,
+                          child: Container(
+                            padding: const EdgeInsets.all(2),
+                            decoration: BoxDecoration(
+                              color: Colors.red,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            constraints: const BoxConstraints(
+                              minWidth: 16,
+                              minHeight: 16,
+                            ),
+                            child: Text(
+                              '${provider.unreadCount}',
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 10,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ),
+                    ],
+                  );
+                },
               ),
               IconButton(
                 icon: const Icon(Icons.person),

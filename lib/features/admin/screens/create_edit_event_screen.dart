@@ -125,7 +125,7 @@ class _CreateEditEventScreenState extends State<CreateEditEventScreen> {
       'location': _locationController.text,
       'imageUrl': _imageUrlController.text,
       'capacity': int.tryParse(_capacityController.text) ?? 100,
-      'date': _startDate.toIso8601String(),
+      'date': eventDate.toUtc().toIso8601String(), // Send as UTC to avoid timezone shifts on server
       'startTime': '${_startTime.hour.toString().padLeft(2, '0')}:${_startTime.minute.toString().padLeft(2, '0')}',
       'endTime': '${(_startTime.hour + 2).toString().padLeft(2, '0')}:${_startTime.minute.toString().padLeft(2, '0')}', // Default 2 hours
     };

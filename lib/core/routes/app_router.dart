@@ -16,6 +16,7 @@ import '../../features/staff/screens/scan_history_screen.dart';
 import '../../features/admin/screens/manage_events_screen.dart';
 import '../../features/admin/screens/create_edit_event_screen.dart';
 import '../../features/admin/screens/event_analytics_screen.dart';
+import '../../features/notifications/screens/notifications_screen.dart';
 
 /// App router configuration
 class AppRouter {
@@ -98,6 +99,12 @@ class AppRouter {
       GoRoute(
         path: '/admin/events/analytics/:id',
         builder: (context, state) => EventAnalyticsScreen(eventId: state.pathParameters['id']!),
+      ),
+      
+      // Common Routes
+      GoRoute(
+        path: '/notifications',
+        builder: (context, state) => const NotificationsScreen(),
       ),
     ],
   );

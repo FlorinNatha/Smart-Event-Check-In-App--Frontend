@@ -41,16 +41,16 @@ class TicketModel {
       eventName: json['event'] is Map ? (json['event']['name'] ?? 'Unknown Event') : 'Unknown Event',
       eventLocation: json['event'] is Map ? (json['event']['location'] ?? '') : '',
       eventDate: json['event'] is Map && json['event']['date'] != null
-          ? DateTime.parse(json['event']['date'])
+          ? DateTime.parse(json['event']['date']).toLocal()
           : DateTime.now(),
       qrCode: json['qrCode'] ?? '',
       status: json['status'] ?? 'active',
       checkedInAt: json['checkedInAt'] != null
-          ? DateTime.parse(json['checkedInAt'])
+          ? DateTime.parse(json['checkedInAt']).toLocal()
           : null,
       checkedInBy: json['checkedInBy'],
       registeredAt: json['registeredAt'] != null
-          ? DateTime.parse(json['registeredAt'])
+          ? DateTime.parse(json['registeredAt']).toLocal()
           : DateTime.now(),
       userName: json['userName'],
       userEmail: json['userEmail'],

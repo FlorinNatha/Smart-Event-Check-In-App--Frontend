@@ -42,66 +42,23 @@ class _QrScannerScreenState extends State<QrScannerScreen> {
     });
 
     try {
-      // Assuming eventId is handled by backend validation or we need to pass it.
-      // In the implementation plan, validateTicket takes ticketId and eventId.
-      // For now, let's assume the QR code contains just the ticket ID, 
-      // but usually it might contain more info. 
-      // Or we can pass a dummy eventId if backend infers it from ticket, 
-      // but my backend controller check: `if (registration.event.toString() !== eventId)`
-      // This requirement makes it tricky if QR only has ticket ID.
-      // **Correction**: The backend requires `eventId` in body. 
-      // However, if the QR code is just the Ticket ID, the staff needs to be in the "context" of an event.
-      // OR, the backend check could be relaxed if we trust the ticket ID is unique enough.
-      // Let's assume for this MVP that the staff selects an event OR we send a dummy/wildcard if the backend allows, 
-      // OR the Staff Dashboard should have let them select an event first.
-      
-      // FOR NOW: I will just pass the ticketId. Functional requirement check:
-      // The backend DOES check eventId. 
-      // I'll need to fetch the event ID from the ticket itself first? No, that defeats the purpose.
-      // Ideally, the staff app state should know which event they are scanning for.
-      // Since I didn't build an "Select Event" screen for staff, 
-      // I will assume for simplicity that the QR Code contains `ticketId:eventId`.
-      // Or I'll temporarily hardcode or fetch the proper event.
-      
-      // Let's try to extract from string if it's formatted. If not, we might fail validation.
-      // BUT, looking at my backend code: `const { ticketId, eventId } = req.body;`
-      // It implies explicit separation.
-      
-      // Quick Fix: I'll modify the backend check in my mind or just send the ticket ID as event ID (won't work).
-      // Let's assume the QR code format is "ticketId,eventId".
-      
-      String tId = ticketId;
+      // Parse ticket ID from QR (handle optional "ticketId,eventId" format)
+      String tId = ticketId.trim();
       String eId = '';
-      
       if (ticketId.contains(',')) {
         final parts = ticketId.split(',');
-        tId = parts[0];
-        if (parts.length > 1) eId = parts[1];
+        tId = parts[0].trim();
+        if (parts.length > 1) eId = parts[1].trim();
       }
 
-      // If we don't have eventId from QR, this will fail backend validation.
-      // Valid approach: Fetch ticket details first, then validate? 
-      // `getTicketById` returns the event.
-      
-      // Better approach for this task without changing too much: 
-      // 1. Get Ticket Details (public/staff endpoint?) - `getTicketById`
-      // 2. Extract Event ID
-      // 3. Call Validate.
-      
-      final ticketDetails = await _ticketRepository.getTicketById(tId);
-      final eventIdFromTicket = ticketDetails.eventId; 
-      
-      debugPrint('🔍 Scanned Ticket ID: $tId');
-      debugPrint('🔍 Extracted Event ID: \'$eventIdFromTicket\'');
-      debugPrint('🔍 Ticket Full Data: $ticketDetails');
-      
-      final result = await _ticketRepository.validateTicket(tId, eventIdFromTicket);
-      
+      // Single API call — backend validates without requiring eventId
+      final result = await _ticketRepository.validateTicket(tId, eId);
+
       if (mounted) {
         _showResultDialog(
           success: true,
-          title: 'Check-in Successful',
-          message: 'Welcome ${result['user']['name']}!',
+          title: 'Check-in Successful ✓',
+          message: 'Welcome, ${result['user']?['name'] ?? 'Attendee'}!',
         );
       }
     } catch (e) {
@@ -109,7 +66,7 @@ class _QrScannerScreenState extends State<QrScannerScreen> {
         _showResultDialog(
           success: false,
           title: 'Check-in Failed',
-          message: e.toString().replaceAll('Exception:', ''),
+          message: e.toString().replaceAll('Exception:', '').trim(),
         );
       }
     }
