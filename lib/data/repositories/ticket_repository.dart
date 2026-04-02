@@ -81,4 +81,13 @@ class TicketRepository {
       rethrow;
     }
   }
+
+  /// Cancel a ticket registration
+  Future<void> cancelTicket(String id) async {
+    try {
+      await _apiService.delete('/registrations/$id');
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

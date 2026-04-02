@@ -1,138 +1,69 @@
-# Smart Event Check-in App
+# Smart Event Frontend (Flutter) 📱
 
-A comprehensive, production-ready Flutter mobile application for event check-in management with QR code generation and scanning capabilities.
+A high-performance, Material 3 Flutter application for event attendees, staff, and administrators. 
 
-## Features
+---
 
-### 🎯 Three User Roles
+## 🛠️ Key Features
 
-#### 1. Attendee
-- **Event Discovery**: Browse upcoming events with real-time data.
-- **Registration**: Seamlessly register for events.
-- **My Tickets**: View purchased/registered tickets.
-- **QR Tickets**: Generate dynamic QR codes for check-in.
-- **Profile**: Manage personal details and quick access to tickets.
+### 🔔 Real-time Notification Center
+Attendees receive instant alerts if their registered events are updated or changed. A persistent badge indicates unread messages.
 
-#### 2. Event Staff
-- **QR Scanner**: Fast and reliable ticket scanning using `mobile_scanner`.
-- **Validation Logic**: Instant feedback (Valid/Invalid/Duplicate).
-- **Scan History**: View local history of recent scans.
-- **Stats**: Daily check-in counters.
+### 🎫 Interactive "My Tickets"
+Attendees can browse their registrations and **Cancel/Delete** tickets directly from the mobile app.
 
-#### 3. Admin
-- **Dashboard**: High-level analytics (Total Events, Active Check-ins, Attendance Rates).
-- **Event Management**: Create, Edit, and Delete events with form validation.
-- **Live Monitoring**: Track check-ins in real-time.
-- **Reporting**: Export attendee lists and stats to CSV.
+### 📶 Offline-Ready Event Lists
+The app caches event details for quick lookup, ensuring a smooth experience even in spotty network conditions.
 
-## Tech Stack
+### 🛡️ Privacy First (State Reset)
+The app's memory is completely wiped on logout, ensuring that no ticket or notification data is visible to the next user on the same device.
 
-- **Framework**: Flutter 3.16+
-- **State Management**: Provider (ChangeNotifier)
-- **Routing**: GoRouter (Deep linking support)
-- **QR Integration**: 
-  - `qr_flutter` (Generation)
-  - `mobile_scanner` (Scanning)
-- **Networking**: `http` with Custom Interceptors
-- **Utils**: `intl` (Date formatting), `file_saver` (Exports)
-- **UI**: Material 3 Design, Custom Gradients, Responsive Layouts
+---
 
-## Project Structure
+## 📂 Project Structure
 
 ```
-lib/
-├── main.dart                 # App entry point
-├── app.dart                  # Main app widget (Global Providers)
-├── core/
-│   ├── theme/               # Theme configuration (Colors, TextStyles)
-│   ├── constants/           # App constants & API Endpoints
-│   ├── utils/               # Validators & Formatters
-│   ├── widgets/             # Reusable widgets (Buttons, Cards, Inputs)
-│   └── routes/              # AppRouter configuration
-├── data/
-│   ├── models/              # Data models (Event, Ticket, User)
-│   ├── services/            # ApiService, Storage
-│   └── repositories/        # EventRepo, TicketRepo, StaffRepo, AdminRepo
-└── features/
-    ├── auth/                # Login, Register
-    ├── attendee/            # Home, Events List, Details, Tickets, Profile
-    ├── staff/               # Dashboard, Scanner, History
-    └── admin/               # Dashboard, Event Mgmt, Analytics
+frontend/lib/
+├── core//               # Logic, Routing, Constants, Theme
+├── data//               # Models (Event, Ticket, Notification, User), Repositories
+└── features//
+    ├── auth//           # Login, Register flows
+    ├── attendee//       # Home, Events List, Tickets, Notifications
+    ├── staff//           # QR Scanner, History, Stats
+    └── admin//           # Dashboard, Analytics, CRUD Events
 ```
 
-## Getting Started
+---
 
-### Prerequisites
+## ⚙️ Configuration
 
-- Flutter SDK 3.16+
-- Dart 3.2+
-- Android Studio / VS Code
-- Android Device/Emulator (Min SDK 21)
-- iOS Device/Simulator (iOS 12+)
+### API IP Address
+Update `lib/core/constants/api_constants.dart` with your Server IP:
 
-### Installation
-
-1. Clone the repository:
-   ```bash
-   git clone <repository-url>
-   cd "SMART EVENT CHECK-IN APP"
-   ```
-
-2. Install dependencies:
-   ```bash
-   flutter pub get
-   ```
-
-3. Run the app:
-   ```bash
-   flutter run
-   ```
-
-## Configuration
-
-### API Configuration
-Update `lib/core/constants/api_constants.dart` with your backend URL:
 ```dart
-static const String baseUrl = 'https://your-api.com/api/v1';
+static const String baseUrl = 'http://192.168.x.x:3000/api'; // Physical Device
+// OR
+static const String baseUrl = 'http://10.0.2.2:3000/api'; // Android Emulator
 ```
 
-### Permissions
-The app strictly requires camera usage for the Staff role.
+---
 
-**Android** (`AndroidManifest.xml`):
-```xml
-<uses-permission android:name="android.permission.CAMERA" />
-```
+## 🚀 Getting Started
 
-**iOS** (`Info.plist`):
-```xml
-<key>NSCameraUsageDescription</key>
-<string>We need access to your camera to scan ticket QR codes.</string>
-```
+1.  `flutter pub get`
+2.  `flutter run`
 
-## Features Implementation Status
+---
 
-### ✅ Completed Features
-- **Authentication**: Login/Logout/Register with Token Management.
-- **Attendee Flow**: Browse -> Register -> Ticket -> QR.
-- **Staff Flow**: Dashboard -> Scan -> Validate -> History.
-- **Admin Flow**: Dashboard -> CRUD Events -> Analytics -> Export.
-- **UI/UX**: Polished Material 3 design with dark mode compatibility foundations.
+## 📦 Features Implementation Status
 
-### 🚀 Future Enhancements
-- Offline Mode (Local Database sync).
-- Push Notifications for event updates.
-- Payment Gateway integration for paid tickets.
-- Advanced Analytics Charts.
+-   [x] **Authentication**: Login/Logout/Register with Privacy Reset.
+-   [x] **Attendee Flow**: Home -> Register -> Ticket -> **Delete Ticket**.
+-   [x] **Staff Flow**: Dashboard -> Scan -> Validate -> History.
+-   [x] **Admin Flow**: Dashboard -> CRUD Events -> Analytics -> Export.
+-   [x] **Smart Notifications**: Notification Center + Badge System.
 
-## Contributing
+---
 
-1. Fork the project.
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`).
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`).
-4. Push to the branch (`git push origin feature/AmazingFeature`).
-5. Open a Pull Request.
-
-## License
-
-This project is licensed under the MIT License.
+## 📜 License
+Licensed under the **MIT License**.

@@ -63,4 +63,24 @@ class TicketProvider with ChangeNotifier {
     _error = null;
     notifyListeners();
   }
+
+  /// Cancel a ticket
+  Future<bool> cancelTicket(String id) async {
+    _isLoading = true;
+    _error = null;
+    notifyListeners();
+
+    try {
+      await _repository.cancelTicket(id);
+      // Remove from local list
+      _tickets.removeWhere((t) => t.id == id);
+      return true;
+    } catch (e) {
+      _error = e.toString();
+      return false;
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
 }
