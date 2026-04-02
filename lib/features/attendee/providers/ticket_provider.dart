@@ -54,4 +54,13 @@ class TicketProvider with ChangeNotifier {
     _error = null;
     notifyListeners();
   }
+
+  /// Reset state on logout
+  void reset() {
+    _tickets = [];
+    _selectedTicket = null;
+    _isLoading = false;
+    _error = null;
+    notifyListeners();
+  }
 }
