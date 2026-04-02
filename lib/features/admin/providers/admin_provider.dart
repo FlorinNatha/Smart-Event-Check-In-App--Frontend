@@ -102,4 +102,15 @@ class AdminProvider with ChangeNotifier {
     _error = null;
     notifyListeners();
   }
+
+  /// Reset state on logout
+  void reset() {
+    _isLoading = false;
+    _error = null;
+    _dashboardStats = null;
+    _eventStats = null;
+    _registrations = [];
+    _allRegistrations = [];
+    notifyListeners();
+  }
 }

@@ -38,6 +38,8 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
           IconButton(
             icon: const Icon(Icons.logout),
             onPressed: () async {
+              context.read<AdminProvider>().reset();
+              context.read<EventProvider>().reset();
               await authProvider.logout();
               if (context.mounted) {
                 context.go('/login');

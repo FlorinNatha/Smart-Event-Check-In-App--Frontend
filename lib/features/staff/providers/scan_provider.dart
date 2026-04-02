@@ -79,4 +79,14 @@ class ScanProvider with ChangeNotifier {
       debugPrint('Error fetching stats: $e');
     }
   }
+
+  /// Reset state on logout
+  void reset() {
+    _status = ScanStatus.idle;
+    _message = null;
+    _lastResult = null;
+    _scanHistory = [];
+    _todayScans = 0;
+    notifyListeners();
+  }
 }

@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 import '../../auth/providers/auth_provider.dart';
+import '../providers/event_provider.dart';
+import '../providers/ticket_provider.dart';
+import '../../notifications/providers/notification_provider.dart';
 import '../../../core/theme/app_colors.dart';
 import '../widgets/attendee_app_bar_widget.dart';
 
@@ -189,6 +192,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     width: double.infinity,
                     child: ElevatedButton.icon(
                       onPressed: () async {
+                        // Reset all providers to clear old data
+                        context.read<EventProvider>().reset();
+                        context.read<TicketProvider>().reset();
+                        context.read<NotificationProvider>().reset();
+                        
                         await context.read<AuthProvider>().logout();
                         if (context.mounted) {
                           context.go('/login');

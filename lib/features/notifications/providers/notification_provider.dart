@@ -61,4 +61,12 @@ class NotificationProvider with ChangeNotifier {
       return false;
     }
   }
+
+  /// Reset state on logout
+  void reset() {
+    _notifications = [];
+    _isLoading = false;
+    _error = null;
+    notifyListeners();
+  }
 }
