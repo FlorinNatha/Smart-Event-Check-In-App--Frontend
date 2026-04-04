@@ -65,5 +65,14 @@ static const String baseUrl = 'http://10.0.2.2:3000/api'; // Android Emulator
 
 ---
 
+## 🚀 Future Enhancements
+- **Search & Filter**: Add a search bar and category filters to the Home Screen.
+- **Check-in "Undo"**: Allow staff to reset accidental check-ins.
+- **Pagination**: Implement "Load More" for large event/ticket lists.
+- **Advanced Offline Support**: Enable queuing of registrations while offline.
+- **Image Optimization**: Integrate a proper image processing layer for improved performance.
+
+---
+
 ## 📜 License
 Licensed under the **MIT License**.
