@@ -29,7 +29,7 @@ class ApiConstants {
         if (isEmulator) {
           _baseUrl = 'http://10.0.2.2:3000/api'; // Android emulator
         } else {
-          _baseUrl = 'http://192.168.29.34:3000/api'; // Physical Android phone
+          _baseUrl = 'http://192.168.143.34:3000/api'; // Physical Android phone
         }
       } else if (Platform.isIOS) {
         final deviceInfo = DeviceInfoPlugin();
@@ -37,7 +37,7 @@ class ApiConstants {
 
         // For iOS, use localhost for simulator, IP for physical
         if (iosInfo.isPhysicalDevice) {
-          _baseUrl = 'http://192.168.29.34:3000/api';
+          _baseUrl = 'http://192.168.143.34:3000/api';
         } else {
           _baseUrl = 'http://localhost:3000/api';
         }
